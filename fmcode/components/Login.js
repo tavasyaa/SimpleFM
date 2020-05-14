@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, Text, Dimensions } from 'react-native';
 import { Button, Input, Item } from 'native-base';
 import logo from '../assets/nike.png';
 
-export default function Login() {
+export default function Login({ navigation }) {
   return (
     <View style={styles.container}>
     	<Image source={logo} style={styles.loginimage} reSizeMode="contain"/>
@@ -13,7 +13,10 @@ export default function Login() {
     	<Item regular style={styles.inputs}>
     		<Input secureTextEntry={true} placeholder="Password" />
     	</Item>
-    	<Button style={styles.button}>
+    	<Button style={styles.button} onPress={() => 
+        navigation.navigate('Homepage')
+        }
+      >
     		<Text style={styles.buttontext}> Login </Text>
     	</Button>
     </View>
