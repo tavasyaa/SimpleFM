@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Image, Text, Dimensions } from 'react-native';
 
-
 export default function Homepage() {
-  return (
-    <View>
-		<Text>Dummy text!</Text>
-    </View>
+	const[name, setName] = useState([]);
+	const[points, setPoints] = useState([]);
+	const[gamesplayed, setGamesplayed] = useState([]);
+
+	return (
+		<View>
+			<Text>{points}</Text>
+		</View>
   );
 }
+
