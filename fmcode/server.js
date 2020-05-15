@@ -13,9 +13,6 @@ const connection = mysql.createPool({
   database : 'simplefm'
 });
 
-console.log(process.env.USER);
-console.log(process.env.HOST);
-
 const app = express();
 
 app.get('/home', function (req, res) {
