@@ -14,7 +14,7 @@ export default function Login({ navigation }) {
     		<Input secureTextEntry={true} placeholder="Password" />
     	</Item>
     	<Button style={styles.button} onPress={() => 
-        navigation.navigate('Homepage')
+        navigation.navigate('Home')
         }
       >
     		<Text style={styles.buttontext}> Login </Text>
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
   	justifyContent: 'center',
   },
   inputs: {
-  	marginTop: 3,
-  	marginBottom: 3,
+  	marginTop: 4,
+  	marginBottom: 4,
   	width: 250
   }
 })
