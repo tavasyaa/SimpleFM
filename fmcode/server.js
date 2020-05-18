@@ -15,12 +15,24 @@ const connection = mysql.createPool({
 
 const app = express();
 
+// printing the data on the home screen
 app.get('/home', function (req, res) {
     connection.getConnection(function (err, connection) {
     	if (err) throw err;
     	connection.query('SELECT * FROM season', function (error, results, fields) {
     		if (error) throw error;
     		res.send(results)
+		});
+	});
+});
+
+// simulating a gameweek, simplistic for now
+app.put('/home', function (req, res) {
+    connection.getConnection(function (err, connection) {
+    	if (err) throw err;
+    	connection.query('update season set gamesplayed = gamesplayed + 1', function (error, results, fields) {
+    		if (error) throw error;
+    		res.end();
 		});
 	});
 });

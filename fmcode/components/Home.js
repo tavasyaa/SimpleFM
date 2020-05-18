@@ -10,6 +10,7 @@ export default class Home extends React.Component {
 
 	constructor() {
 		super();
+		this.simGameweek = this.simGameweek.bind(this);
 		this.loadData();
 	};
 
@@ -25,10 +26,16 @@ export default class Home extends React.Component {
 		console.log('we got the prem table data ;)'); 
 	};
 
-	// this gets called when the component is constructed for some reason, and never when button pressed - why?
+// this works, but we need to make it so when the server fails an error is thrown, instead of just twiddling our thumbs
 	simGameweek() {
+		fetch('http://10.0.0.118:3000/home', {
+ 			method: 'PUT'})
+			.catch(err => console.log(err))
+
+		this.loadData();
+
 		console.log('gameweek simmed');
-	}
+	};
 
 	render(){
 		if (this.state.data.length){
@@ -55,7 +62,7 @@ export default class Home extends React.Component {
 						</DataTable.Header>
 						{rows}
 					</DataTable>
-					<Button style={styles.button} onPress={this.simGameweek()}>
+					<Button style={styles.button} onPress={this.simGameweek}>
 						<Text style={styles.buttontext}>Sim Gameweek</Text>
 					</Button>
 					<Button style={styles.button} onPress={() => 
