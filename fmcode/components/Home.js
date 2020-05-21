@@ -28,12 +28,9 @@ export default class Home extends React.Component {
 
 // this works, but we need to make it so when the server fails an error is thrown, instead of just twiddling our thumbs
 	simGameweek() {
-		fetch('http://10.0.0.118:3000/home', {
- 			method: 'PUT'})
+		fetch('http://10.0.0.118:3000/home', {method: 'PUT'})
 			.catch(err => console.log(err))
-
 		this.loadData();
-
 		console.log('gameweek simmed');
 	};
 
