@@ -49,7 +49,7 @@ export default class Home extends React.Component {
 						<DataTable.Title numeric>Games</DataTable.Title>
 						<DataTable.Title numeric>Goals</DataTable.Title>
 						<DataTable.Title numeric>Assists</DataTable.Title>
-						<DataTable.Title numeric>Clean Sheets</DataTable.Title>
+						<DataTable.Title numeric>CS</DataTable.Title>
 						</DataTable.Header>
 						{rows}
 					</DataTable>
@@ -64,7 +64,6 @@ export default class Home extends React.Component {
       			</View>
       			)
 			}
-		);
 	}
 }
 
