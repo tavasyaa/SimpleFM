@@ -9,5 +9,6 @@ Complexity should increase with time!
 
 ### Stuff up next:
 
-Logic for gameweeks: how to create mathematically consistent results etc
+Logic for gameweeks: Append results and display them  
+Randomize how players are chosen to have scored etc  
 Clean the code after minimum functionality is implemented -- we can probably reuse some components, for example the table
