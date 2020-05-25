@@ -2,15 +2,22 @@ import React from 'react';
 import { StyleSheet, View, Image, Text, Dimensions, ActivityIndicator } from 'react-native';
 import { Button } from 'native-base'
 import { DataTable } from 'react-native-paper';
+import Popover from 'react-native-popover-view'
 
 export default class Home extends React.Component {
 	state = {
-		data: ''
+		// season data from db
+		data: '',
+		// boolean for popover
+		isVisible: false
 	};
 
 	constructor() {
 		super();
 		this.simGameweek = this.simGameweek.bind(this);
+		this.hidePopover = this.hidePopover.bind(this);
+		this.reset = this.reset.bind(this);
+
 		this.loadData();
 	};
 
@@ -34,8 +41,27 @@ export default class Home extends React.Component {
 		console.log('gameweek simmed');
 	};
 
+	reset() {
+		fetch('http://10.0.0.118:3000/reset', {method: 'PUT'})
+			.catch(err => console.log(err))
+		// this is a bit buggy, maybe we can fix this using promises
+		this.state.isVisible = false;
+		this.loadData();
+	};
+
+	hidePopover() {
+		this.setState({isVisible: false});
+		console.log(this.state.isVisible);
+	};
+
 	render(){
+
+
 		if (this.state.data.length){
+
+			if (this.state.data[0].gamesplayed >= 10){
+				this.state.isVisible = true;
+			}
 
 			const rows = []
 
@@ -51,6 +77,7 @@ export default class Home extends React.Component {
 
 			return (
 				<View style={styles.container}>
+
 					<DataTable>
 						<DataTable.Header>
 						<DataTable.Title>Team</DataTable.Title>
@@ -63,10 +90,22 @@ export default class Home extends React.Component {
 						<Text style={styles.buttontext}>Sim Gameweek</Text>
 					</Button>
 					<Button style={styles.button} onPress={() => 
-        			this.props.navigation.navigate('Players')}
-        			>
+        			this.props.navigation.navigate('Players')}>
 						<Text style={styles.buttontext}>View Players</Text>
 					</Button>
+
+					<Popover isVisible={this.state.isVisible}>
+	      				<Text> The season has ended!</Text>
+						<Button style={styles.button} onPress={this.hidePopover}>
+							<Text style={styles.buttontext}>Cancel</Text>							
+						</Button>
+						<Button style={styles.button} onPress={this.reset}>
+							<Text style={styles.buttontext}>Reset Season</Text>							
+						</Button>
+						<Text style={styles.buttontext}>{this.state.isVisible}</Text>
+
+   					</Popover>
+
 				</View>
 		  );
 		}

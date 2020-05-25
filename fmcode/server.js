@@ -31,6 +31,7 @@ app.get('/home', function (req, res) {
 // simulating a gameweek, simplistic for now - each team has a probability of winning, we multiply that with a random number. 
 // the top two teams get wins, the bottom two losses, and the middle two draws. This will be refined with time but it's a good
 // start!
+// Append in results DB as well!
 app.put('/home', function (req, res) {
 	// an array with each probability of winning, and the randomized probability for the gameweek
 	probs = [];
@@ -48,7 +49,7 @@ app.put('/home', function (req, res) {
     		if (error) throw error;
 
     		for (var i = 0; i < results.length; i++){
-    			probs.push([results[i].probability, results[i].probability * Math.random()]);
+    			probs.push([results[i].probability, results[i].probability * Math.random(), results[i].name]);
     		}
 
     		probs.sort(function (a, b){
@@ -77,6 +78,13 @@ app.put('/home', function (req, res) {
 					});
 				}
 		    }
+
+            // TO WRITE: update the results db with the results we just got, use the rand shit to put in scores
+           /* connection.query('insert into results value', function (error, results, fields) {
+                if (error) throw error;
+                console.log(results);
+            });*/
+
     	});
 
     	connection.query('update season set gamesplayed = gamesplayed + 1', function (error, results, fields) {
@@ -96,6 +104,17 @@ app.get('/players', function (req, res) {
     		console.log(results[0].name);
 		});
 	});
+});
+
+// reset the db
+app.put('/reset', function (req, res) {
+    connection.getConnection(function (err, connection) {
+        if (err) throw err;
+        connection.query('update season set gamesplayed = 0, wins = 0, losses = 0, draws = 0', function (error, results, fields) {
+            if (error) throw error;
+            res.end()
+        });
+    });
 });
 
 app.listen(process.env.PORT, () => {
