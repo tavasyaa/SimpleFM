@@ -9,7 +9,8 @@ export default class Home extends React.Component {
 		// season data from db
 		data: '',
 		// boolean for popover
-		isVisible: false
+		isVisible: false,
+		winner: ''
 	};
 
 	constructor() {
@@ -20,6 +21,7 @@ export default class Home extends React.Component {
 
 		this.loadData();
 	};
+
 
 	loadData = async() => {
         fetch('http://10.0.0.118:3000/home')
@@ -33,9 +35,9 @@ export default class Home extends React.Component {
 		console.log('we got the prem table data ;)'); 
 	};
 
-// this works, but we need to make it so when the server fails an error is thrown, instead of just twiddling our thumbs
-	simGameweek() {
-		fetch('http://10.0.0.118:3000/home', {method: 'PUT'})
+	// async and await make this synchronous, so the data isn't loaded before the gameweek is simulated -- much better!
+	simGameweek = async() => {
+		await fetch('http://10.0.0.118:3000/home', {method: 'PUT'})
 			.catch(err => console.log(err))
 		this.loadData();
 		console.log('gameweek simmed');
@@ -61,6 +63,17 @@ export default class Home extends React.Component {
 
 			if (this.state.data[0].gamesplayed >= 10){
 				this.state.isVisible = true;
+
+				winner = 'Liverpool';
+				toppoints = this.state.data[0].points;
+
+				for (var i = 1; i < this.state.data.length; i++) {
+					if (this.state.data[i] > toppoints){
+						toppoints = this.state.data[i].points;
+						winner = this.state.data[i].name;
+					}
+				}
+				this.state.winner = winner
 			}
 
 			const rows = []
@@ -94,16 +107,14 @@ export default class Home extends React.Component {
 						<Text style={styles.buttontext}>View Players</Text>
 					</Button>
 
-					<Popover isVisible={this.state.isVisible}>
-	      				<Text> The season has ended!</Text>
-						<Button style={styles.button} onPress={this.hidePopover}>
-							<Text style={styles.buttontext}>Cancel</Text>							
-						</Button>
-						<Button style={styles.button} onPress={this.reset}>
-							<Text style={styles.buttontext}>Reset Season</Text>							
-						</Button>
-						<Text style={styles.buttontext}>{this.state.isVisible}</Text>
-
+					<Popover isVisible={this.state.isVisible} style={styles.popover}>
+						<View style={styles.container}>
+		      				<Text style={styles.popovertext}> The season has ended:</Text>
+		      				<Text style={styles.popovertext}> Congratulations to champions {this.state.winner}!</Text>
+							<Button style={styles.button} onPress={this.reset}>
+								<Text style={styles.buttontext}>Reset Season</Text>							
+							</Button>
+						</View>
    					</Popover>
 
 				</View>
@@ -134,10 +145,15 @@ const styles = StyleSheet.create({
   button: {
   	width: 110,
   	justifyContent: 'center',
-  	marginTop: 3,
-  	marginBottom: 3
+  	marginTop: 5,
+  	marginBottom: 5
   },
   buttontext: {
   	color: '#fff'
+  },
+  popovertext: {
+  	marginTop: 3,
+  	marginLeft: 10,
+  	marginRight: 10
   }
 });
