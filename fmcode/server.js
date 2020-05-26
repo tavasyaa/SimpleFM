@@ -40,7 +40,7 @@ app.put('/home', function (req, res) {
     connection.getConnection(function (err, connection) {
     	if (err) throw err;
 
-    	// this works, but now "nextgame" can be against yourself which is a problem lol
+    	// this works, but now "nextgame" can be against yourself which is a problem lol - we don't use this logic for now anyway
     	connection.query('update season set nextgame = (nextgame % 6) + 1', function(error, results, fields){
     		if (error) throw error;
     	});
@@ -56,34 +56,44 @@ app.put('/home', function (req, res) {
     			return b[1]-a[1];
     		})
 
-    		console.log(probs);
-
     		for (var i = 0; i < 6; i++) {
     			if (i < 2){
 			    	connection.query('update season set wins = wins + 1 where probability=' + probs[i][0], function (error, results, fields) {
 			    		if (error) throw error;
-			    		console.log(results);
 					});
 				}
 				else if (2 <= i < 4){
 			    	connection.query('update season set draws = draws + 1 where probability=' + probs[i][0], function (error, results, fields) {
 			    		if (error) throw error;
-			    		console.log(results);
 					});
 				}
-				else {
+                // why do no losses register on the db???
+				else if (4 <= i){
+                    console.log('we got here');
 			    	connection.query('update season set losses = losses + 1 where probability=' + probs[i][0], function (error, results, fields) {
 			    		if (error) throw error;
-			    		console.log(results);
 					});
 				}
 		    }
 
-            // TO WRITE: update the results db with the results we just got, use the rand shit to put in scores
-           /* connection.query('insert into results value', function (error, results, fields) {
-                if (error) throw error;
-                console.log(results);
-            });*/
+            begin = 0;
+            end = probs.length - 1;
+            console.log(probs)
+
+            // entering results into results db but draws are not always draws in results!!
+            for (var i = 0; i < (results.length/2); i++) {
+                beginscore = Math.round(probs[begin][1]*4);
+                endscore = Math.round(probs[end][1]*4);
+                query = 'insert into results values' + '(' + '"' + probs[begin][2] + 
+                '"' + ',' + '"' + probs[end][2] + '"' + ',' +  beginscore + ',' + endscore + ')';
+
+                connection.query(query, function (error, results, fields) {
+                    if (error) throw error;
+                });  
+
+                begin = begin + 1;
+                end = end - 1;
+            }
 
     	});
 
@@ -101,16 +111,32 @@ app.get('/players', function (req, res) {
     	connection.query('SELECT * FROM players', function (error, results, fields) {
     		if (error) throw error;
     		res.send(results);
-    		console.log(results[0].name);
 		});
 	});
+});
+
+// getting results data
+app.get('/results', function (req, res) {
+    connection.getConnection(function (err, connection) {
+        if (err) throw err;
+        connection.query('SELECT * FROM results', function (error, results, fields) {
+            if (error) throw error;
+            res.send(results);
+        });
+    });
 });
 
 // reset the db
 app.put('/reset', function (req, res) {
     connection.getConnection(function (err, connection) {
         if (err) throw err;
+        // resetting season db
         connection.query('update season set gamesplayed = 0, wins = 0, losses = 0, draws = 0', function (error, results, fields) {
+            if (error) throw error;
+            res.end()
+        });
+        // resetting player db
+        connection.query('update players set gamesplayed = 0, goals = 0, assists = 0, cleansheets = 0', function (error, results, fields) {
             if (error) throw error;
             res.end()
         });

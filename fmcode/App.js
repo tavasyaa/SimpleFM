@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Login from './components/Login.js';
 import Home from './components/Home.js';
 import Players from './components/Players.js';
+import Results from './components/Results.js';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -16,6 +17,7 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Players" component={Players} />
+        <Stack.Screen name="Results" component={Results} />
       </Stack.Navigator>
     </NavigationContainer>
   );

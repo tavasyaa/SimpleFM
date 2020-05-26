@@ -83,6 +83,9 @@ export default class Home extends React.Component {
 			        <DataTable.Row key={i}>
 			          <DataTable.Cell>{this.state.data[i].name}</DataTable.Cell>
 			          <DataTable.Cell numeric>{this.state.data[i].gamesplayed}</DataTable.Cell>
+			          <DataTable.Cell numeric>{this.state.data[i].wins}</DataTable.Cell>
+			          <DataTable.Cell numeric>{this.state.data[i].draws}</DataTable.Cell>
+			          <DataTable.Cell numeric>{this.state.data[i].losses}</DataTable.Cell>
 			          <DataTable.Cell numeric>{this.state.data[i].points}</DataTable.Cell>
 			        </DataTable.Row>
 				)
@@ -94,7 +97,10 @@ export default class Home extends React.Component {
 					<DataTable>
 						<DataTable.Header>
 						<DataTable.Title>Team</DataTable.Title>
-						<DataTable.Title numeric>Games</DataTable.Title>
+						<DataTable.Title numeric>GP</DataTable.Title>
+						<DataTable.Title numeric>W</DataTable.Title>
+						<DataTable.Title numeric>D</DataTable.Title>
+						<DataTable.Title numeric>L</DataTable.Title>
 						<DataTable.Title numeric>Points</DataTable.Title>
 						</DataTable.Header>
 						{rows}
@@ -104,7 +110,11 @@ export default class Home extends React.Component {
 					</Button>
 					<Button style={styles.button} onPress={() => 
         			this.props.navigation.navigate('Players')}>
-						<Text style={styles.buttontext}>View Players</Text>
+						<Text style={styles.buttontext}>Players</Text>
+					</Button>
+					<Button style={styles.button} onPress={() => 
+        			this.props.navigation.navigate('Results')}>
+						<Text style={styles.buttontext}>Results</Text>
 					</Button>
 
 					<Popover isVisible={this.state.isVisible} style={styles.popover}>
