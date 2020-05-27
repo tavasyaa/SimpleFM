@@ -26,12 +26,11 @@ app.get('/home', function (req, res) {
 	});
 });
 
-
+// Next, update the players DB as well for goals scored etc
 
 // simulating a gameweek, simplistic for now - each team has a probability of winning, we multiply that with a random number. 
 // the top two teams get wins, the bottom two losses, and the middle two draws. This will be refined with time but it's a good
 // start!
-// Append in results DB as well!
 app.put('/home', function (req, res) {
 	// an array with each probability of winning, and the randomized probability for the gameweek
 	probs = [];
@@ -137,6 +136,11 @@ app.put('/reset', function (req, res) {
         });
         // resetting player db
         connection.query('update players set gamesplayed = 0, goals = 0, assists = 0, cleansheets = 0', function (error, results, fields) {
+            if (error) throw error;
+            res.end()
+        });
+
+        connection.query('delete from results', function (error, results, fields) {
             if (error) throw error;
             res.end()
         });
