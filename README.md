@@ -1,6 +1,8 @@
 # SimpleFM
 
-### A simple version of Football Manager
+### A simple version of Football Manager  
+A little mobile game that lets you simulate English soccer seasons. Will your team win? Who will be top scorer? Use this little app and find out!
+
 #### React Native, Node, Express, MySQL
 
 Reqs, notes etc can be found here: https://docs.google.com/document/d/1CPjBUB_xIeGby0FUNNhlLmA9KSrggnHKitWkQZ9eZ-s/edit?usp=sharing
