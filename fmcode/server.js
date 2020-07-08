@@ -23,6 +23,7 @@ app.get('/home', function (req, res) {
     		if (error) throw error;
     		res.send(results)
 		});
+        connection.release();
 	});
 });
 
@@ -31,6 +32,10 @@ app.get('/home', function (req, res) {
 // simulating a gameweek, simplistic for now - each team has a probability of winning, we multiply that with a random number. 
 // the top two teams get wins, the bottom two losses, and the middle two draws. This will be refined with time but it's a good
 // start!
+
+// the problem is the way you're making connections, this causes the server to stop responding after a bit. We saw that the 
+// client is not the problem because curl bugs out too, and we used select directly with the db so that's not the
+// problem either
 app.put('/home', function (req, res) {
 	// an array with each probability of winning, and the randomized probability for the gameweek
 	probs = [];
@@ -100,6 +105,7 @@ app.put('/home', function (req, res) {
     		if (error) throw error;
     		res.end();
 		});
+        connection.release();
 	});
 });
 
@@ -111,6 +117,9 @@ app.get('/players', function (req, res) {
     		if (error) throw error;
     		res.send(results);
 		});
+        console.log("we got the players")
+        connection.release();
+
 	});
 });
 
@@ -122,6 +131,7 @@ app.get('/results', function (req, res) {
             if (error) throw error;
             res.send(results);
         });
+        connection.release();
     });
 });
 
@@ -144,6 +154,7 @@ app.put('/reset', function (req, res) {
             if (error) throw error;
             res.end()
         });
+        connection.release();
     });
 });
 
